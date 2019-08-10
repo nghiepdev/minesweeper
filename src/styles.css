@@ -14,7 +14,7 @@
 
 .mines-grid {
   display: grid;
-  grid-gap: 3px;
+  grid-gap: 2px;
   grid-template-columns: repeat(var(--size), var(--width));
 }
 
@@ -31,10 +31,11 @@
 }
 
 .mines-grid .cell * {
-  /* display: none; */
+  display: none;
 }
 
-.mines-grid .cell.is-mine {
+.mines-grid .cell.is-mine * {
+  display: initial;
 }
 
 .mines-grid .cell.opened {
@@ -44,6 +45,10 @@
 
 .mines-grid .cell.opened * {
   display: initial;
+}
+
+.mines-grid .cell.empty * {
+  display: none;
 }
 
 /* Rodal */

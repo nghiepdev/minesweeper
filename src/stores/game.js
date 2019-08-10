@@ -50,7 +50,7 @@ class GameStore {
         `https://tiki-minesweeper.herokuapp.com/getMines?size=${size}&mines=${mines}`,
       );
 
-      this.mines = data.map(({x, y}) => [x, y]);
+      this.mines = data.map(({x, y}) => `${x}-${y}`);
 
       this.state = 'done';
     } catch (e) {
