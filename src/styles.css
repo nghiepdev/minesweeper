@@ -11,3 +11,53 @@
 .App-header {
   margin-bottom: 30px;
 }
+
+.mines-grid {
+  display: grid;
+  grid-gap: 3px;
+  grid-template-columns: repeat(var(--size), var(--width));
+}
+
+.mines-grid .cell {
+  width: var(--width);
+  height: var(--height);
+  background: #3c3c3c;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  user-select: none;
+}
+
+.mines-grid .cell * {
+  /* display: none; */
+}
+
+.mines-grid .cell.is-mine {
+}
+
+.mines-grid .cell.opened {
+  background: #7b7b7b;
+  pointer-events: none;
+}
+
+.mines-grid .cell.opened * {
+  display: initial;
+}
+
+/* Rodal */
+
+.rodal-dialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.rodal-header {
+  border-bottom: 1px solid #c7c7c7;
+  margin-bottom: 20px;
+}
+
+.rodal-footer {
+  margin-top: auto;
+}
