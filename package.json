@@ -1,5 +1,5 @@
 {
-  "name": "mine-sweeper",
+  "name": "minesweeper",
   "version": "0.1.0",
   "description": "Tiki game testing",
   "keywords": [
@@ -18,7 +18,7 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.0",
+    "react-scripts": "3.1.1",
     "rodal": "^1.6.3"
   },
   "scripts": {
@@ -46,18 +46,17 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-proposal-decorators": "^7.4.4",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "prettier": "^1.18.2"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/nghiepit/mine-sweeper.git"
+    "url": "git://github.com/nghiepit/minesweeper.git"
   },
   "bugs": {
-    "url": "https://github.com/nghiepit/mine-sweeper/issues"
+    "url": "https://github.com/nghiepit/minesweeper/issues"
   },
-  "homepage": "https://mine-sweeper.nghiepit.dev"
+  "homepage": "https://minesweeper.nghiepit.dev",
+  "license": "ISC"
 }

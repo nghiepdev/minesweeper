@@ -2,4 +2,4 @@
 
 > Tiki game testing
 
-### Demo: https://mine-sweeper.nghiepit.dev
+### Demo: https://minesweeper.nghiepit.dev

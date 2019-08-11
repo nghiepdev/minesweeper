@@ -13,7 +13,7 @@ function App() {
       <h1 className="App-header">
         Minesweeper{' '}
         <a
-          href="https://github.com/nghiepit/mine-sweeper"
+          href="https://github.com/nghiepit/minesweeper"
           target="_blank"
           rel="noopener noreferrer">
           [Source]
@@ -23,7 +23,7 @@ function App() {
         <Router>
           <Switch>
             <Route path="/" exact component={Index} />
-            <Route path="/play/:level" component={Play} />{' '}
+            <Route path="/play/:level" component={Play} />
             <Route render={() => <div>Page not found</div>} />
           </Switch>
         </Router>
