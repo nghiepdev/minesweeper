@@ -1,5 +1,5 @@
 import {observable, computed, action, decorate} from 'mobx';
-import {compose, prop, propEq, map} from 'ramda';
+import {compose, prop, propEq, map, includes} from 'ramda';
 import Axios from 'axios';
 
 class GameStore {
@@ -24,6 +24,8 @@ class GameStore {
 
   mines = [];
 
+  cellOpened = [];
+
   get levelKeys() {
     // TODO: remove soon
     // add for ignore mobx debug
@@ -38,8 +40,52 @@ class GameStore {
     return this.level.find(propEq('name', level));
   };
 
+  calculateMineCount = ({x, y}, level) => {
+    const {size} = this.getLevelInfo(level);
+    let mineCount = 0;
+
+    for (let i = Math.max(x - 1, 0); i <= Math.min(x + 1, size); i++) {
+      for (let j = Math.max(y - 1, 0); j <= Math.min(y + 1, size); j++) {
+        if (this.checkCellIsMine({x: i, y: j})) {
+          mineCount++;
+        }
+      }
+    }
+
+    return mineCount;
+  };
+
+  checkCellOpened = ({x, y}) => {
+    return includes(`${x}-${y}`, this.cellOpened);
+  };
+
+  checkCellIsMine = ({x, y}) => {
+    return includes(`${x}-${y}`, this.mines);
+  };
+
+  handleCellOpen = ({x, y}, level) => {
+    if (this.checkCellOpened({x, y})) {
+      return;
+    }
+
+    const {size} = this.getLevelInfo(level);
+
+    this.cellOpened = [...this.cellOpened, `${x}-${y}`];
+
+    if (!this.calculateMineCount({x, y}, level)) {
+      for (let i = Math.max(x - 1, 0); i <= Math.min(x + 1, size); i++) {
+        for (let j = Math.max(y - 1, 0); j <= Math.min(y + 1, size); j++) {
+          if (!this.checkCellOpened({x: i, y: j})) {
+            this.handleCellOpen({x: i, y: j}, level);
+          }
+        }
+      }
+    }
+  };
+
   fetchMines = async level => {
     this.state = 'pending';
+    this.cellOpened = [];
 
     try {
       const {size, mines} = this.getLevelInfo(level);
@@ -63,8 +109,13 @@ decorate(GameStore, {
   state: observable,
   level: observable,
   mines: observable,
+  cellOpened: observable,
   levelKeys: computed,
   fetchMines: action,
+  calculateMineCount: action,
+  checkCellOpened: action,
+  checkCellIsMine: action,
+  handleCellOpen: action,
 });
 
 export const gameStore = new GameStore();

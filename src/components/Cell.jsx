@@ -1,13 +1,22 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import {MobXProviderContext} from 'mobx-react';
 
-const Cell = ({value, opened, mine, forceOpen, onGameOver, onOpen}) => {
+const Cell = ({cell, opened, level, forceOpen, onGameOver}) => {
+  const {
+    gameStore: {calculateMineCount, checkCellIsMine, handleCellOpen},
+  } = useContext(MobXProviderContext);
+
+  const mine = checkCellIsMine(cell);
+  const value = calculateMineCount(cell, level);
+
   function handleCheckMine() {
     if (mine) {
       return onGameOver();
     }
-    onOpen();
+
+    handleCellOpen(cell, level);
   }
 
   return (
@@ -24,9 +33,9 @@ const Cell = ({value, opened, mine, forceOpen, onGameOver, onOpen}) => {
 };
 
 Cell.propTypes = {
-  value: PropTypes.number.isRequired,
+  cell: PropTypes.object.isRequired,
+  level: PropTypes.string.isRequired,
   opened: PropTypes.bool.isRequired,
-  mine: PropTypes.bool.isRequired,
   forceOpen: PropTypes.bool.isRequired,
   onGameOver: PropTypes.func.isRequired,
 };

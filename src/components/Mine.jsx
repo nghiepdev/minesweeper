@@ -1,6 +1,6 @@
-import React, {useState, useCallback, useMemo, useContext} from 'react';
+import React, {useState, useMemo, useContext} from 'react';
 import PropTypes from 'prop-types';
-import {MobXProviderContext} from 'mobx-react';
+import {MobXProviderContext, observer} from 'mobx-react';
 import {withRouter} from 'react-router-dom';
 import Rodal from 'rodal';
 import {includes} from 'ramda';
@@ -8,92 +8,32 @@ import {includes} from 'ramda';
 import Cell from './Cell';
 
 const Mine = ({level, history, onForceNewGame}) => {
-  const {
-    gameStore: {mines},
-  } = useContext(MobXProviderContext);
   const [modal, setModal] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const [openCells, setOpenCells] = useState([]);
-
-  const calculateMineCount = useCallback(
-    (x, y) => {
-      let mineCount = 0;
-
-      for (let i = Math.max(x - 1, 0); i <= Math.min(x + 1, level.size); i++) {
-        for (
-          let j = Math.max(y - 1, 0);
-          j <= Math.min(y + 1, level.size);
-          j++
-        ) {
-          if (includes(`${i}-${j}`, mines)) {
-            mineCount++;
-          }
-        }
-      }
-
-      return mineCount;
-    },
-    [level.size, mines],
-  );
-
-  const handleOpenCell = useCallback(
-    (x, y) => {
-      setOpenCells([...openCells, `${x}-${y}`]);
-
-      // if (!calculateMineCount(x, y)) {
-      //   for (
-      //     let i = Math.max(x - 1, 0);
-      //     i <= Math.min(x + 1, level.size);
-      //     i++
-      //   ) {
-      //     for (
-      //       let j = Math.max(y - 1, 0);
-      //       j <= Math.min(y + 1, level.size);
-      //       j++
-      //     ) {
-      //       console.log([i, j], openCells2);
-
-      //       if (!includes(`${i}-${j}`, openCells2)) {
-      //         handleOpenCell(i, j);
-      //       }
-      //     }
-      //   }
-      // }
-    },
-    [openCells],
-  );
+  const {
+    gameStore: {cellOpened},
+  } = useContext(MobXProviderContext);
 
   const generateGrid = useMemo(() => {
     const rows = [];
 
     for (let i = 0; i < level.size; i++) {
       for (let j = 0; j < level.size; j++) {
-        const mine = includes(`${i}-${j}`, mines);
-        const opened = includes(`${i}-${j}`, openCells);
-
         rows.push(
           <Cell
             key={`${i}-${j}`}
-            opened={opened}
-            mine={mine}
+            cell={{x: i, y: j}}
             forceOpen={gameOver}
-            value={calculateMineCount(i, j)}
             onGameOver={handleGameOver}
-            onOpen={() => handleOpenCell(i, j)}
+            level={level.name}
+            opened={includes(`${i}-${j}`, cellOpened)}
           />,
         );
       }
     }
 
     return rows;
-  }, [
-    handleOpenCell,
-    calculateMineCount,
-    gameOver,
-    level.size,
-    mines,
-    openCells,
-  ]);
+  }, [level.size, level.name, gameOver, cellOpened]);
 
   function handleGameOver() {
     setGameOver(true);
@@ -140,4 +80,4 @@ Mine.propTypes = {
   onForceNewGame: PropTypes.func.isRequired,
 };
 
-export default withRouter(Mine);
+export default withRouter(observer(Mine));
