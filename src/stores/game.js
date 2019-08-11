@@ -73,9 +73,11 @@ class GameStore {
     this.cellOpened = [...this.cellOpened, `${x}-${y}`];
 
     if (this.calculateMineCount({x, y}, level) === 0) {
-      for (let i = Math.max(x - 1, 0); i < Math.min(x + 1, size); i++) {
-        for (let j = Math.max(y - 1, 0); j < Math.min(y + 1, size); j++) {
-          this.handleCellOpen({x: i, y: j}, level);
+      for (let i = Math.max(x - 1, 0); i <= Math.min(x + 1, size); i++) {
+        for (let j = Math.max(y - 1, 0); j <= Math.min(y + 1, size); j++) {
+          if (i <= size - 1 && j <= size - 1) {
+            this.handleCellOpen({x: i, y: j}, level);
+          }
         }
       }
     }
