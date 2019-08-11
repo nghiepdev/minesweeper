@@ -34,9 +34,9 @@
   display: none;
 }
 
-.mines-grid .cell.is-mine * {
+/* .mines-grid .cell.is-mine * {
   display: initial;
-}
+} */
 
 .mines-grid .cell.opened {
   background: #7b7b7b;

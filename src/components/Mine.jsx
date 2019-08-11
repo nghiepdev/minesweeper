@@ -1,4 +1,10 @@
-import React, {useState, useMemo, useEffect, useContext} from 'react';
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import {MobXProviderContext, observer} from 'mobx-react';
 import {withRouter} from 'react-router-dom';
@@ -6,10 +12,14 @@ import Rodal from 'rodal';
 import {includes} from 'ramda';
 
 import Cell from './Cell';
+import Timer from './Timer';
+
+import {secondsToTime} from '../helpers';
 
 const Mine = ({level, history, onForceNewGame}) => {
   const [modal, setModal] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [timer, setTimer] = useState(0);
   const {
     gameStore: {mines, cellOpened},
   } = useContext(MobXProviderContext);
@@ -35,6 +45,10 @@ const Mine = ({level, history, onForceNewGame}) => {
     return rows;
   }, [level.size, level.name, gameOver, cellOpened]);
 
+  const play = useMemo(() => {
+    return !!cellOpened.length;
+  }, [cellOpened.length]);
+
   const isWin = useMemo(() => {
     return cellOpened.length >= level.size * level.size - mines.length;
   }, [cellOpened, level.size, mines]);
@@ -54,8 +68,13 @@ const Mine = ({level, history, onForceNewGame}) => {
     setModal(false);
   }
 
+  const handleGetTimer = useCallback(timer => {
+    setTimer(timer);
+  }, []);
+
   return (
     <div>
+      <Timer play={play && !isWin && !gameOver} onPause={handleGetTimer} />
       <section
         className="mines-grid"
         style={{
@@ -71,7 +90,7 @@ const Mine = ({level, history, onForceNewGame}) => {
         </div>
         <div className="rodal-body">
           {gameOver ? (
-            <div>You lost the game in hh:mm:ss</div>
+            <div>You lost the game in {secondsToTime(timer)}</div>
           ) : (
             <div>You won</div>
           )}
