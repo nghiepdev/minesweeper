@@ -10,7 +10,15 @@ import Play from './routes/play';
 function App() {
   return (
     <div className="App">
-      <h1 className="App-header">Minesweeper</h1>
+      <h1 className="App-header">
+        Minesweeper{' '}
+        <a
+          href="https://github.com/nghiepit/mine-sweeper"
+          target="_blank"
+          rel="noopener noreferrer">
+          [Source]
+        </a>
+      </h1>
       <Provider {...stores}>
         <Router>
           <Switch>

@@ -1,6 +1,8 @@
 import React, {useState, useEffect, memo} from 'react';
 import PropTypes from 'prop-types';
 
+import {secondsToTime} from '../helpers';
+
 const Timer = ({play, onPause}) => {
   const [seconds, setSeconds] = useState(0);
 
@@ -20,7 +22,7 @@ const Timer = ({play, onPause}) => {
     };
   }, [onPause, play, seconds]);
 
-  return <div>{seconds}</div>;
+  return <div>{secondsToTime(seconds)}</div>;
 };
 
 Timer.propTypes = {
