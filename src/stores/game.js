@@ -64,7 +64,7 @@ class GameStore {
   };
 
   handleCellOpen = ({x, y}, level) => {
-    if (this.checkCellOpened({x, y})) {
+    if (this.checkCellOpened({x, y}) || this.checkCellIsMine({x, y})) {
       return;
     }
 
@@ -72,12 +72,10 @@ class GameStore {
 
     this.cellOpened = [...this.cellOpened, `${x}-${y}`];
 
-    if (!this.calculateMineCount({x, y}, level)) {
-      for (let i = Math.max(x - 1, 0); i <= Math.min(x + 1, size); i++) {
-        for (let j = Math.max(y - 1, 0); j <= Math.min(y + 1, size); j++) {
-          if (!this.checkCellOpened({x: i, y: j})) {
-            this.handleCellOpen({x: i, y: j}, level);
-          }
+    if (this.calculateMineCount({x, y}, level) === 0) {
+      for (let i = Math.max(x - 1, 0); i < Math.min(x + 1, size); i++) {
+        for (let j = Math.max(y - 1, 0); j < Math.min(y + 1, size); j++) {
+          this.handleCellOpen({x: i, y: j}, level);
         }
       }
     }

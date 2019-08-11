@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useContext} from 'react';
+import React, {useState, useMemo, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 import {MobXProviderContext, observer} from 'mobx-react';
 import {withRouter} from 'react-router-dom';
@@ -11,7 +11,7 @@ const Mine = ({level, history, onForceNewGame}) => {
   const [modal, setModal] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const {
-    gameStore: {cellOpened},
+    gameStore: {mines, cellOpened},
   } = useContext(MobXProviderContext);
 
   const generateGrid = useMemo(() => {
@@ -34,6 +34,16 @@ const Mine = ({level, history, onForceNewGame}) => {
 
     return rows;
   }, [level.size, level.name, gameOver, cellOpened]);
+
+  const isWin = useMemo(() => {
+    return cellOpened.length >= level.size * level.size - mines.length;
+  }, [cellOpened, level.size, mines]);
+
+  useEffect(() => {
+    if (isWin) {
+      setModal(isWin);
+    }
+  }, [isWin]);
 
   function handleGameOver() {
     setGameOver(true);
