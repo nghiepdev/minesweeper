@@ -1,22 +1,22 @@
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {MobXProviderContext} from 'mobx-react';
 
-const Cell = ({cell, opened, level, forceOpen, onGameOver}) => {
+const Cell = ({x, y, opened, level, forceOpen, onGameOver}) => {
   const {
     gameStore: {calculateMineCount, checkCellIsMine, handleCellOpen},
   } = useContext(MobXProviderContext);
 
-  const mine = checkCellIsMine(cell);
-  const value = calculateMineCount(cell, level);
+  const mine = checkCellIsMine({x, y});
+  const value = calculateMineCount({x, y}, level);
 
   function handleCheckMine() {
     if (mine) {
       return onGameOver();
     }
 
-    handleCellOpen(cell, level);
+    handleCellOpen({x, y}, level);
   }
 
   return (
@@ -33,11 +33,12 @@ const Cell = ({cell, opened, level, forceOpen, onGameOver}) => {
 };
 
 Cell.propTypes = {
-  cell: PropTypes.object.isRequired,
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
   level: PropTypes.string.isRequired,
   opened: PropTypes.bool.isRequired,
   forceOpen: PropTypes.bool.isRequired,
   onGameOver: PropTypes.func.isRequired,
 };
 
-export default Cell;
+export default memo(Cell);

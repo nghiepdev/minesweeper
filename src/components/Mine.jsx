@@ -24,6 +24,11 @@ const Mine = ({level, history, onForceNewGame}) => {
     gameStore: {mines, cellOpened},
   } = useContext(MobXProviderContext);
 
+  const handleGameOver = useCallback(() => {
+    setGameOver(true);
+    setModal(true);
+  }, []);
+
   const generateGrid = useMemo(() => {
     const rows = [];
 
@@ -32,7 +37,8 @@ const Mine = ({level, history, onForceNewGame}) => {
         rows.push(
           <Cell
             key={`${i}-${j}`}
-            cell={{x: i, y: j}}
+            x={i}
+            y={j}
             forceOpen={gameOver}
             onGameOver={handleGameOver}
             level={level.name}
@@ -43,7 +49,7 @@ const Mine = ({level, history, onForceNewGame}) => {
     }
 
     return rows;
-  }, [level.size, level.name, gameOver, cellOpened]);
+  }, [level.size, level.name, gameOver, handleGameOver, cellOpened]);
 
   const play = useMemo(() => {
     return !!cellOpened.length;
@@ -58,11 +64,6 @@ const Mine = ({level, history, onForceNewGame}) => {
       setModal(isWin);
     }
   }, [isWin]);
-
-  function handleGameOver() {
-    setGameOver(true);
-    setModal(true);
-  }
 
   function handleCloseModal() {
     setModal(false);
